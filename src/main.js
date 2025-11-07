@@ -95,9 +95,10 @@ function analyzeSalesData(data, options) {
         seller_id: seller.id,
         name: seller.name,
         revenue: +(seller.revenue.toFixed(2)),
-        profit: +(seller.profit.toFixed(2)),
+        revenue: Math.round(seller.revenue),     
+        profit: Math.round(seller.profit),
         sales_count: seller.sales_count,
         top_products: seller.top_products,
-        bonus: +(seller.bonus.toFixed(2))
+        bonus: Math.round(seller.bonus)
     }));
 }
