@@ -70,8 +70,9 @@ function analyzeSalesData(data, options) {
             const cost = Number(product.purchase_price) * Number(item.quantity);
             const itemProfit = revenue - cost;
 
-            seller.revenue = +( (seller.revenue + revenue).toFixed(2) );
-            seller.profit = +( (seller.profit + itemProfit).toFixed(2) );
+            seller.revenue += revenue;
+            seller.profit += itemProfit;
+            
             seller.products_sold[item.sku] = (seller.products_sold[item.sku] || 0) + Number(item.quantity);
         });
     });
