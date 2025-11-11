@@ -56,24 +56,23 @@ function analyzeSalesData(data, options) {
     const productIndex = Object.fromEntries(data.products.map(p => [p.sku, p]));
 
     // Обработка чеков
-    data.purchase_records.forEach(record => {
+        data.purchase_records.forEach(record => {
         const seller = sellerIndex[record.seller_id];
-        if (!seller) return;
-
         seller.sales_count += 1;
+        seller.revenue += record.total_amount; 
 
         record.items.forEach(item => {
             const product = productIndex[item.sku];
-            if (!product) return;
-
+            const cost = product.purchase_price * item.quantity;
             const revenue = calculateRevenue(item, product);
-            const cost = Number(product.purchase_price) * Number(item.quantity);
-            const itemProfit = revenue - cost;
+            const profit = revenue - cost;
 
-            seller.revenue += revenue;
-            seller.profit += itemProfit;
-            
-            seller.products_sold[item.sku] = (seller.products_sold[item.sku] || 0) + Number(item.quantity);
+            seller.profit += profit;
+
+            if (!seller.products_sold[item.sku]) {
+                seller.products_sold[item.sku] = 0;
+            }
+            seller.products_sold[item.sku] += item.quantity;
         });
     });
 
